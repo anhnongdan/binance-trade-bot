@@ -72,6 +72,9 @@ class AutoTrader:
     def initialize_trade_thresholds(self):
         """
         Initialize the buying threshold of all the coins for trading between them
+
+        Thangnt: inti 'from' and 'to' pair and update the price ratio in Session. 
+        For my bot, 'to' is always USDT -> need fix the config a bit!!
         """
         all_tickers = self.manager.get_all_market_tickers()
 

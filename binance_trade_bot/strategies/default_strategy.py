@@ -13,6 +13,10 @@ class Strategy(AutoTrader):
     def scout(self):
         """
         Scout for potential jumps from the current coin to another coin
+
+        Thangnt: this is equivalent to the indicators in strategy.
+        This function should not execute trades directly like this. 
+        Need to output the yes/no flag for buy/sell.
         """
         all_tickers = self.manager.get_all_market_tickers()
 

@@ -81,6 +81,8 @@ class BinanceAPIManager:
     def get_currency_balance(self, currency_symbol: str):
         """
         Get balance of a specific coin
+
+        Get balance in the Binance Wallet, not our DB!!
         """
         for currency_balance in self.binance_client.get_account()["balances"]:
             if currency_balance["asset"] == currency_symbol:
@@ -210,6 +212,8 @@ class BinanceAPIManager:
     def _buy_alt(self, origin_coin: Coin, target_coin: Coin, all_tickers):
         """
         Buy altcoin
+
+        Thangnt: This is the main part of Long Position. Take care of this!
         """
         trade_log = self.db.start_trade_log(origin_coin, target_coin, False)
         origin_symbol = origin_coin.symbol
@@ -219,6 +223,8 @@ class BinanceAPIManager:
         target_balance = self.get_currency_balance(target_symbol)
         from_coin_price = all_tickers.get_price(origin_symbol + target_symbol)
 
+        ## Thangnt: get quantity by ordering full size of target balance!
+        ## I need order with specific size or % of wallet balance!
         order_quantity = self._buy_quantity(origin_symbol, target_symbol, target_balance, from_coin_price)
         self.logger.info(f"BUY QTY {order_quantity}")
 
@@ -240,6 +246,8 @@ class BinanceAPIManager:
 
         trade_log.set_ordered(origin_balance, target_balance, order_quantity)
 
+        ## wait until order is filled. This might not be neccessary. 
+        ## pay attention to should_cancel_order to intervent in this point.
         stat = self.wait_for_order(origin_symbol, target_symbol, order["orderId"])
 
         if stat is None:
@@ -295,6 +303,7 @@ class BinanceAPIManager:
         if stat is None:
             return None
 
+        ## Why not checking balance on buy orders?
         new_balance = self.get_currency_balance(origin_symbol)
         while new_balance >= origin_balance:
             new_balance = self.get_currency_balance(origin_symbol)
