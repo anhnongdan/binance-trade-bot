@@ -8,6 +8,10 @@ from .coin import Coin
 
 
 class CurrentCoin(Base):  # pylint: disable=too-few-public-methods
+    '''Thangnt: This can represent the open position for future!!
+
+    '''
+
     __tablename__ = "current_coin_history"
     id = Column(Integer, primary_key=True)
     coin_id = Column(String, ForeignKey("coins.symbol"))

@@ -15,6 +15,11 @@ class TradeState(enum.Enum):
 
 
 class Trade(Base):  # pylint: disable=too-few-public-methods
+    '''
+    Thangnt: Trade should be used to store the historical trades.
+    This is important for analytics. 
+
+    '''
     __tablename__ = "trade_history"
 
     id = Column(Integer, primary_key=True)
